@@ -1,1 +1,71 @@
-abcdef
+
+	
+<script type="module">
+	import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+	import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
+	import { getDatabase, set, ref, onValue ,child, get, push, update } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+
+	const firebaseConfig = {
+	apiKey: "AIzaSyDgbuxR9JOVW8yG8ZwIzM_GErlfrGmUZG0",
+	authDomain: "crud-4bf58.firebaseapp.com",
+	projectId: "crud-4bf58",
+	storageBucket: "crud-4bf58.appspot.com",
+	messagingSenderId: "338615148687",
+	appId: "1:338615148687:web:5b23c1e40cf2c6eb3b10fa",
+	measurementId: "G-HRYHLCBM7P",
+	databaseURL: "https://crud-4bf58-default-rtdb.asia-southeast1.firebasedatabase.app/"
+	};
+
+
+	const app = initializeApp(firebaseConfig);
+	
+	function tampil(a){
+		const db = getDatabase(app);
+		const starCountRef = ref(db, a);
+		onValue(starCountRef, (snapshot) => {
+			const data = snapshot.val();
+			console.log(data);
+            document.getElementById("celcius").innerHTML=data['celcius'];
+            document.getElementById("fahrenheit").innerHTML=data['fahrenheit'];
+            document.getElementById("humidity").innerHTML=data['humidity'];
+		});
+		
+	}
+	
+	function hapus(a){
+		const db = getDatabase(app);
+		const postData = {};
+		const updates = {};
+		updates[a] = postData;
+		return update(ref(db), updates);
+	}
+
+	function simpan(a,celcius,fahrenheit,humidity){
+		
+		const db = getDatabase(app);
+		set(ref(db, a), {
+			celcius:celcius,
+			fahrenheit:fahrenheit,
+			humidity:humidity
+		});
+		
+	}
+
+	const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		
+		const id_perangkat = urlParams.get('id_perangkat')
+		const celcius = urlParams.get('celcius')
+		const fahrenheit = urlParams.get('fahrenheit')
+		const humidity = urlParams.get('humidity')
+
+
+	tampil(id_perangkat);
+
+    
+
+</script>
+
+<span id="celcius"></span>
+<span id="fahrenheit"></span>
+<span id="humidity"></span>
